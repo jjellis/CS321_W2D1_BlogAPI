@@ -15,9 +15,10 @@ namespace CS321_W2D1_BlogAPI.Controllers
         // Constructor
         // IPostService is automatically injected by the ASP.NET framework, if you've
         // configured it properly in Startup.ConfigureServices()
-        public PostsController(/* TODO: add a parameter of type IPostService */)
+        public PostsController(/* TODO: add a parameter of type IPostService */IPostService postService)
         {
             //TODO: keep a reference to the service so we can use it in methods below
+            _postService = postService;
         }
 
         // get all posts
@@ -26,6 +27,7 @@ namespace CS321_W2D1_BlogAPI.Controllers
         public IActionResult Get()
         {
             // TODO: return OK 200 status and list of posts
+            return Ok(_postService.GetAll());
         }
 
         // get specific post by id
@@ -35,7 +37,7 @@ namespace CS321_W2D1_BlogAPI.Controllers
         {
             // look up post by id
             // TODO: use _postsService to get post by id
-
+            var post = _postService.FirstOrDefault(p => p.Id == id);
             // if not found, return 404 NotFound 
             if (post == null) return NotFound();
 
@@ -50,7 +52,8 @@ namespace CS321_W2D1_BlogAPI.Controllers
         {
             // add the new post
             // TODO: use _postService to add newPost
-
+            _postService.Add(newPost);
+           
             // return a 201 Created status. This will also add a "location" header
             // with the URI of the new post. E.g., /api/posts/99, if the new is 99
             return CreatedAtAction("Get", new { Id = newPost.Id }, newPost);
@@ -72,6 +75,9 @@ namespace CS321_W2D1_BlogAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            var post = _postService.FirstOrDefault(p => p.Id == id);
+            _postService.Remove(post);
+            return Ok(_postService);
             // TODO: use _postService to get post by id
             if (post == null) return NotFound();
             // TODO: use _postService to update post
