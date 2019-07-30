@@ -74,7 +74,7 @@ namespace CS321_W2D1_BlogAPI.Controllers
             }
             else
             {
-            return _postService.Update(updatedPost);
+            return Ok (_postService.Update(updatedPost));
             }
         }
 
