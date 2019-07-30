@@ -64,10 +64,18 @@ namespace CS321_W2D1_BlogAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Post updatedPost)
         {
-            var post = _postService.Update(updatedPost);
+            //var post = _postService.Update(updatedPost);
             // TODO: use _postService to update post. store returned Post in the post variable.
-            if (post == null) return NotFound();
-            return Ok(post);
+            Post post = _postService.Get(id);
+
+            if (post == null)
+            { 
+            return NotFound();
+            }
+            else
+            {
+            return _postService.Update(updatedPost);
+            }
         }
 
         // delete an existing post
